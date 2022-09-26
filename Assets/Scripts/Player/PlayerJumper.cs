@@ -11,6 +11,7 @@ public class PlayerJumper : MonoBehaviour
     public int comboCounter;
     [SerializeField] Rigidbody _rb;
     [SerializeField] float _jumpPower;
+    [SerializeField] int _jumpPowerIncrease;
     [SerializeField] Animator _anim;
     [SerializeField] ParticleSystem partical;
     [SerializeField] StairsSpawner stairsSpawner;
@@ -60,6 +61,7 @@ public class PlayerJumper : MonoBehaviour
             Isjumpable = true;
             _anim.SetBool("Shape", true);
 
+            //Get Collided Stairs Index From StairList
             GameManager.Instance.StairsCount = FindObjectOfType<StairsSpawner>().StairsList.IndexOf(other.gameObject) + 1;
             _stairsCountText.text = "Stairs : " + GameManager.Instance.StairsCount;
 
@@ -67,7 +69,7 @@ public class PlayerJumper : MonoBehaviour
             partical.transform.SetParent(other.gameObject.transform);
             partical.Play();
 
-            if (other.gameObject == stairsSpawner.StairsList[stairsSpawner.StairsList.Count -1 ].gameObject)
+            if (other.gameObject == stairsSpawner.StairsList[stairsSpawner.StairsList.Count - 1].gameObject)
             {
                 GameManager.Instance.IntializeGameWin();
             }
@@ -76,18 +78,18 @@ public class PlayerJumper : MonoBehaviour
             if (transform.GetComponent<MeshRenderer>().material.color == other.transform.GetComponent<MeshRenderer>().material.color)
             {
                 comboCounter++;
-                if (comboCounter > 8)
-                {
-                    comboCounter = 8;
-                }
+                // if (comboCounter > 8)
+                // {
+                //     comboCounter = 8;
+                // }
                 if (comboCounter % 2 == 0 & comboCounter > 0)
                 {
-                    JumpPower += 2;
+                    JumpPower += _jumpPowerIncrease;
                     StartCoroutine(SetComboText());
-                    if (JumpPower > 13)
-                    {
-                        JumpPower = 13;
-                    }
+                    // if (JumpPower > 30)
+                    // {
+                    //     JumpPower = 30;
+                    // }
                 }
             }
             else
@@ -102,14 +104,15 @@ public class PlayerJumper : MonoBehaviour
         if (other.gameObject.CompareTag("Stairs"))
         {
             _anim.SetBool("Shape", false);
+
+            //Get Next 4 Stairs Color Randomly For Player
+            int index = FindObjectOfType<StairsSpawner>().StairsList.IndexOf(other.gameObject);
+            int index2 = FindObjectOfType<StairsSpawner>().StairsList.IndexOf(other.gameObject) + 4;
+            int rndm = Random.Range(index, index2);
+            transform.GetComponent<MeshRenderer>().material.color = stairsSpawner.StairsList[rndm].GetComponent<MeshRenderer>().material.color;
+
             print(JumpPower);
-            GetRandomColor();
         }
-    }
-    void GetRandomColor()
-    {
-        int rndm = Random.Range(0, _colorList.Count);
-        transform.GetComponent<MeshRenderer>().material.color = _colorList[rndm];
     }
     IEnumerator SetComboText()
     {

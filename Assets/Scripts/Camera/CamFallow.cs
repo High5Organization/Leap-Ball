@@ -15,7 +15,7 @@ public class CamFallow : MonoBehaviour
     }
     private void Update()
     {
-        if (playerJumper.comboCounter > 5)
+        if (playerJumper.comboCounter > 5 && GameManager.Instance.GameState == GameStates.InGameStart)
         {
             SpeedUpEffect.SetActive(true);
             float fieldOfView = Mathf.Lerp(Camera.fieldOfView, 70, Time.deltaTime * 10);

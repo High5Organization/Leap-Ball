@@ -14,8 +14,8 @@ public class StairsSpawner : MonoBehaviour
     [SerializeField] float _stairsSpawnRate;
     [SerializeField] GameObject _stairsPrefab;
     [SerializeField] List<Color> _colorList;
-    public List<GameObject> StairsList;
     [SerializeField] PlayerJumper playerJumper;
+    public List<GameObject> StairsList;
     #endregion
 
     private void Awake()

@@ -72,25 +72,27 @@ public class PlayerJumper : MonoBehaviour
             if (other.gameObject == stairsSpawner.StairsList[stairsSpawner.StairsList.Count - 1].gameObject)
             {
                 GameManager.Instance.IntializeGameWin();
+                Handheld.Vibrate();
             }
 
 
             if (transform.GetComponent<MeshRenderer>().material.color == other.transform.GetComponent<MeshRenderer>().material.color)
             {
+                Handheld.Vibrate();
                 comboCounter++;
-                // if (comboCounter > 8)
+                // // if (comboCounter > 8)
+                // // {
+                // //     comboCounter = 8;
+                // // }
+                // if (comboCounter % 2 == 0 & comboCounter > 0)
                 // {
-                //     comboCounter = 8;
+                //     // if (JumpPower > 30)
+                //     // {
+                //     //     JumpPower = 30;
+                //     // }
                 // }
-                if (comboCounter % 2 == 0 & comboCounter > 0)
-                {
-                    JumpPower += _jumpPowerIncrease;
-                    StartCoroutine(SetComboText());
-                    // if (JumpPower > 30)
-                    // {
-                    //     JumpPower = 30;
-                    // }
-                }
+                JumpPower += _jumpPowerIncrease;
+                StartCoroutine(SetComboText());
             }
             else
             {
@@ -112,6 +114,13 @@ public class PlayerJumper : MonoBehaviour
             transform.GetComponent<MeshRenderer>().material.color = stairsSpawner.StairsList[rndm].GetComponent<MeshRenderer>().material.color;
 
             print(JumpPower);
+        }
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("GoUp"))
+        {
+            _rb.velocity = Vector3.up * JumpPower;
         }
     }
     IEnumerator SetComboText()

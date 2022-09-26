@@ -33,6 +33,7 @@ public class StairsSpawner : MonoBehaviour
     }
     private void Start()
     {
+        _playerTrail.SetActive(false);
         _player.transform.position = new Vector3(StairsList[0].transform.position.x, StairsList[0].GetComponent<MeshRenderer>().bounds.size.y + .5f, _stairsDistanceZ - 5);
         StartCoroutine(SpawnStairs());
 
@@ -52,8 +53,16 @@ public class StairsSpawner : MonoBehaviour
     }
     private void Update()
     {
-        float yAxis = Mathf.Lerp(_playerTrail.transform.position.y, _player.transform.position.y, Time.deltaTime * 10);
-        _playerTrail.transform.position = new Vector3(transform.position.x, yAxis, _player.transform.position.z);
+        if (playerJumper.comboCounter > 3 && GameManager.Instance.GameState == GameStates.InGameStart)
+        {
+            _playerTrail.SetActive(true);
+            float yAxis = Mathf.Lerp(_playerTrail.transform.position.y, _player.transform.position.y, Time.deltaTime * 10);
+            _playerTrail.transform.position = new Vector3(transform.position.x, yAxis, _player.transform.position.z);
+        }
+        else
+        {
+            _playerTrail.SetActive(false);
+        }
     }
     public GameObject GetPooledObject()
     {

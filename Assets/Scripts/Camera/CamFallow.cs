@@ -12,6 +12,7 @@ public class CamFallow : MonoBehaviour
     [SerializeField] GameObject SpeedUpEffect;
     private void Start()
     {
+        GameManager.Instance.IsDestructable = false;
         Bloom bloom;
         Camera.fieldOfView = 60;
         SpeedUpEffect.SetActive(false);
@@ -27,6 +28,7 @@ public class CamFallow : MonoBehaviour
         {
             Bloom bloom;
             SpeedUpEffect.SetActive(true);
+            // StartCoroutine(Destruct());
 
             float fieldOfView = Mathf.Lerp(Camera.fieldOfView, 90, Time.deltaTime * 10);
             Camera.fieldOfView = fieldOfView;
@@ -51,6 +53,8 @@ public class CamFallow : MonoBehaviour
         {
             Bloom bloom;
 
+            GameManager.Instance.IsDestructable = false;
+
             SpeedUpEffect.SetActive(false);
 
             float fieldOfView = Mathf.Lerp(Camera.fieldOfView, 60, Time.deltaTime * 10);
@@ -64,6 +68,15 @@ public class CamFallow : MonoBehaviour
                 bloom.intensity.value = 1;
             }
         }
+        // IEnumerator Destruct()
+        // {
+        //     print("bi daha");
+        //     GameManager.Instance.IsDestructable = true;
+
+        //     yield return new WaitForSeconds(2f);
+
+        //     GameManager.Instance.IsDestructable = false;
+        // }
         // _rb.angularVelocity = Vector3.up * InputSystem.HorizontalDirection*2;
     }
 }

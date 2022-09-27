@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     public int StairsCount;
     public int BounceCount;
     public int PoolSize;
+    public bool IsDestructable;
     #region Singleton
 
     public static GameManager Instance { get; private set; }

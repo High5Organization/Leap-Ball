@@ -1048,10 +1048,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1553656912}
     - target: {fileID: -7885271487676469886, guid: de941c4cfb8b2264ea22b8696ea38d4b, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -7885271487676469886, guid: de941c4cfb8b2264ea22b8696ea38d4b, type: 3}
       propertyPath: _comboAnim
       value: 
       objectReference: {fileID: 770377023}
@@ -1059,10 +1055,6 @@ PrefabInstance:
       propertyPath: _comboText
       value: 
       objectReference: {fileID: 1385676249}
-    - target: {fileID: -7885271487676469886, guid: de941c4cfb8b2264ea22b8696ea38d4b, type: 3}
-      propertyPath: _jumpPower
-      value: 7
-      objectReference: {fileID: 0}
     - target: {fileID: -7885271487676469886, guid: de941c4cfb8b2264ea22b8696ea38d4b, type: 3}
       propertyPath: _comboParent
       value: 
@@ -1088,14 +1080,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1528364301}
     - target: {fileID: -7885271487676469886, guid: de941c4cfb8b2264ea22b8696ea38d4b, type: 3}
-      propertyPath: _jumpPowerIncrease
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: -7885271487676469886, guid: de941c4cfb8b2264ea22b8696ea38d4b, type: 3}
-      propertyPath: ComboWordsList.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: -7885271487676469886, guid: de941c4cfb8b2264ea22b8696ea38d4b, type: 3}
       propertyPath: ComboWordsList.Array.data[0]
       value: 
       objectReference: {fileID: 1623025059}
@@ -1107,45 +1091,21 @@ PrefabInstance:
       propertyPath: ComboWordsList.Array.data[2]
       value: 
       objectReference: {fileID: 1295728315}
-    - target: {fileID: 1626522037, guid: de941c4cfb8b2264ea22b8696ea38d4b, type: 3}
-      propertyPath: m_Layer
-      value: 3
+    - target: {fileID: 1051301940, guid: de941c4cfb8b2264ea22b8696ea38d4b, type: 3}
+      propertyPath: EmissionModule.enabled
+      value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 1626522037, guid: de941c4cfb8b2264ea22b8696ea38d4b, type: 3}
-      propertyPath: m_IsActive
+    - target: {fileID: 1051301940, guid: de941c4cfb8b2264ea22b8696ea38d4b, type: 3}
+      propertyPath: EmissionModule.rateOverDistance.scalar
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1626522040, guid: de941c4cfb8b2264ea22b8696ea38d4b, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1.5112
-      objectReference: {fileID: 0}
-    - target: {fileID: 1626522040, guid: de941c4cfb8b2264ea22b8696ea38d4b, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1.5112
-      objectReference: {fileID: 0}
-    - target: {fileID: 1626522040, guid: de941c4cfb8b2264ea22b8696ea38d4b, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1.5112
-      objectReference: {fileID: 0}
-    - target: {fileID: 1626522040, guid: de941c4cfb8b2264ea22b8696ea38d4b, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -3.8
+    - target: {fileID: 1051301940, guid: de941c4cfb8b2264ea22b8696ea38d4b, type: 3}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].cycleCount
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2352160899969526332, guid: de941c4cfb8b2264ea22b8696ea38d4b, type: 3}
       propertyPath: m_RootOrder
       value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 2352160899969526332, guid: de941c4cfb8b2264ea22b8696ea38d4b, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 2352160899969526332, guid: de941c4cfb8b2264ea22b8696ea38d4b, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 2352160899969526332, guid: de941c4cfb8b2264ea22b8696ea38d4b, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1.2
       objectReference: {fileID: 0}
     - target: {fileID: 2352160899969526332, guid: de941c4cfb8b2264ea22b8696ea38d4b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1191,25 +1151,9 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerCapsule
       objectReference: {fileID: 0}
-    - target: {fileID: 2352160899969526335, guid: de941c4cfb8b2264ea22b8696ea38d4b, type: 3}
-      propertyPath: m_Layer
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 3762464427070424386, guid: de941c4cfb8b2264ea22b8696ea38d4b, type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 7806605505920913638, guid: de941c4cfb8b2264ea22b8696ea38d4b, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 8377377779249586349, guid: de941c4cfb8b2264ea22b8696ea38d4b, type: 3}
       propertyPath: m_Constraints
-      value: 26
-      objectReference: {fileID: 0}
-    - target: {fileID: 8377377779249586349, guid: de941c4cfb8b2264ea22b8696ea38d4b, type: 3}
-      propertyPath: m_CollisionDetection
-      value: 3
+      value: 122
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: de941c4cfb8b2264ea22b8696ea38d4b, type: 3}
@@ -1765,6 +1709,7 @@ MonoBehaviour:
   _stairsSpawnAngle: 30
   _player: {fileID: 15680992}
   _playerTrail: {fileID: 1625987264}
+  _playerFireTrail: {fileID: 1505372347}
   _stairsHigh: 1.5
   _stairsDistanceZ: -5
   _stairsSpawnRate: 0.05
@@ -2040,6 +1985,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1483337177}
   m_CullTransparentMesh: 1
+--- !u!1 &1505372347 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3177063957229195763, guid: de941c4cfb8b2264ea22b8696ea38d4b, type: 3}
+  m_PrefabInstance: {fileID: 1061872119}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1528364299
 GameObject:
   m_ObjectHideFlags: 0
@@ -2556,7 +2506,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1085412806299596, guid: 46876a2780737ec45a19d62f88e5ce56, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1119560965430016, guid: 46876a2780737ec45a19d62f88e5ce56, type: 3}
       propertyPath: m_IsActive
@@ -8112,6 +8062,7 @@ MonoBehaviour:
   StairsCount: 0
   BounceCount: 0
   PoolSize: 100
+  IsDestructable: 0
 --- !u!114 &2072940430
 MonoBehaviour:
   m_ObjectHideFlags: 0

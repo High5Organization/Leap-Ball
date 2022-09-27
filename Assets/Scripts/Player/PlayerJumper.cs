@@ -80,9 +80,9 @@ public class PlayerJumper : MonoBehaviour
             GameManager.Instance.StairsCount = FindObjectOfType<StairsSpawner>().StairsList.IndexOf(other.gameObject) + 1;
             _stairsCountText.text = "Stairs : " + GameManager.Instance.StairsCount;
 
-            partical.transform.position = new Vector3(transform.position.x, transform.position.y - 0.4f, transform.position.z);
-            partical.transform.SetParent(other.gameObject.transform);
-            partical.Play();
+            // partical.transform.position = new Vector3(transform.position.x, transform.position.y - 0.4f, transform.position.z);
+            // partical.transform.SetParent(other.gameObject.transform);
+            // partical.Play();
 
             if (other.gameObject == stairsSpawner.StairsList[stairsSpawner.StairsList.Count - 1].gameObject)
             {
@@ -93,6 +93,12 @@ public class PlayerJumper : MonoBehaviour
             {
                 Handheld.Vibrate();
                 comboCounter++;
+
+                if (comboCounter > 5)
+                {
+                    StartCoroutine(Destruct());
+                }
+
                 if (comboCounter % 2 == 0 & comboCounter > 0)
                 {
                     StartCoroutine(ShowComboHitText());
@@ -116,7 +122,7 @@ public class PlayerJumper : MonoBehaviour
             _anim.SetBool("Shape", false);
 
             //Get Next 4 Stairs Color Randomly For Player
-            int index = FindObjectOfType<StairsSpawner>().StairsList.IndexOf(other.gameObject);
+            int index = FindObjectOfType<StairsSpawner>().StairsList.IndexOf(other.gameObject) + 1;
             int index2 = FindObjectOfType<StairsSpawner>().StairsList.IndexOf(other.gameObject) + 4;
             int rndm = Random.Range(index, index2);
             transform.GetComponent<MeshRenderer>().material.color = stairsSpawner.StairsList[rndm].GetComponent<MeshRenderer>().material.color;
@@ -130,9 +136,9 @@ public class PlayerJumper : MonoBehaviour
         }
         if (other.CompareTag("Destruction"))
         {
-            if (comboCounter > 5)
+            if (GameManager.Instance.IsDestructable)
             {
-                // Destroy(other.GetComponentInParent<OneWayBoxCollider>().gameObject);
+                Destroy(other.GetComponentInParent<OneWayBoxCollider>().gameObject);
             }
         }
     }
@@ -159,6 +165,15 @@ public class PlayerJumper : MonoBehaviour
         ComboWordsList[rndm].SetActive(true);
         yield return new WaitForSeconds(1f);
         ComboWordsList[rndm].SetActive(false);
+    }
+    IEnumerator Destruct()
+    {
+        print("bi daha");
+        GameManager.Instance.IsDestructable = true;
+
+        yield return new WaitForSeconds(2f);
+
+        GameManager.Instance.IsDestructable = false;
     }
     void HideComboHitText()
     {

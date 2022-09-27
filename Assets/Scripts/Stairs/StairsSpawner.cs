@@ -9,6 +9,7 @@ public class StairsSpawner : MonoBehaviour
     Queue<GameObject> _stairsPoolObjects;
     [SerializeField] GameObject _player;
     [SerializeField] GameObject _playerTrail;
+    [SerializeField] GameObject _playerFireTrail;
     [SerializeField] float _stairsHigh;
     [SerializeField] float _stairsDistanceZ;
     [SerializeField] float _stairsSpawnRate;
@@ -34,6 +35,7 @@ public class StairsSpawner : MonoBehaviour
     private void Start()
     {
         _playerTrail.SetActive(false);
+        _playerFireTrail.SetActive(false);
         _player.transform.position = new Vector3(StairsList[0].transform.position.x, StairsList[0].GetComponent<MeshRenderer>().bounds.size.y + .5f, _stairsDistanceZ - 5);
         StartCoroutine(SpawnStairs());
 
@@ -46,6 +48,9 @@ public class StairsSpawner : MonoBehaviour
             int rndm = Random.Range(0, _colorList.Count);
             Stairs.GetComponent<MeshRenderer>().material.color = _colorList[rndm];
         }
+
+        StairsList[StairsList.Count - 1].transform.GetChild(0).gameObject.SetActive(false); //Turn off the last stairs destruction
+
         _player.transform.GetComponent<MeshRenderer>().material.color = StairsList[0].GetComponent<MeshRenderer>().material.color;
         _player.GetComponent<Rigidbody>().isKinematic = true;
         _playerTrail.transform.position = _player.transform.position;
@@ -59,9 +64,15 @@ public class StairsSpawner : MonoBehaviour
             float yAxis = Mathf.Lerp(_playerTrail.transform.position.y, _player.transform.position.y, Time.deltaTime * 10);
             _playerTrail.transform.position = new Vector3(transform.position.x, yAxis, _player.transform.position.z);
         }
+        if (playerJumper.comboCounter > 5 && GameManager.Instance.GameState == GameStates.InGameStart)
+        {
+            _playerTrail.SetActive(false);
+            _playerFireTrail.SetActive(true);
+        }
         else
         {
             _playerTrail.SetActive(false);
+            _playerFireTrail.SetActive(false);
         }
     }
     public GameObject GetPooledObject()

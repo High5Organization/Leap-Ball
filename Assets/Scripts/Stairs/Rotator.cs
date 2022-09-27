@@ -14,7 +14,7 @@ public class Rotator : MonoBehaviour
     }
     private void Update()
     {
-        float SwipeSpeed = Mathf.Clamp(InputSystem.HorizontalDirection, -0.75f, 0.75f);
+        float SwipeSpeed = Mathf.Clamp(InputSystem.HorizontalDirection, -4f, 4f);
         InputSystem.GetInputData();
         print(SwipeSpeed);
 

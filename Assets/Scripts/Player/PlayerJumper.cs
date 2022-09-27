@@ -13,13 +13,23 @@ public class PlayerJumper : MonoBehaviour
     [SerializeField] float _jumpPower;
     [SerializeField] int _jumpPowerIncrease;
     [SerializeField] Animator _anim;
+    [SerializeField] Animator _comboAnim;
     [SerializeField] ParticleSystem partical;
     [SerializeField] StairsSpawner stairsSpawner;
     [SerializeField] List<Color> _colorList;
     [SerializeField] GameObject _comboText;
+    [SerializeField] GameObject _comboHitCount;
     [SerializeField] GameObject _comboParent;
+    #region TMPRO
+    [Header("TMPRO")]
     [SerializeField] TextMeshProUGUI _bounceCountText;
     [SerializeField] TextMeshProUGUI _stairsCountText;
+    [SerializeField] TextMeshProUGUI _comboHitText;
+    [SerializeField] GameObject GreatText;
+    [SerializeField] GameObject AwesomeText;
+    [SerializeField] GameObject PefectText;
+    [SerializeField] List<GameObject> ComboWordsList;
+    #endregion
 
     public bool Isjumpable;
     private void Awake()
@@ -33,9 +43,14 @@ public class PlayerJumper : MonoBehaviour
 
         _bounceCountText.text = "Bounces : " + GameManager.Instance.BounceCount;
         _stairsCountText.text = "Stairs : " + GameManager.Instance.StairsCount;
-
+        _comboHitCount.SetActive(false);
         comboCounter = 0;
         _comboText.SetActive(false);
+
+        for (int i = 0; i < ComboWordsList.Count; i++)
+        {
+            ComboWordsList[i].SetActive(false);
+        }
     }
     private void Update()
     {
@@ -74,23 +89,15 @@ public class PlayerJumper : MonoBehaviour
                 GameManager.Instance.IntializeGameWin();
                 Handheld.Vibrate();
             }
-
-
             if (transform.GetComponent<MeshRenderer>().material.color == other.transform.GetComponent<MeshRenderer>().material.color)
             {
                 Handheld.Vibrate();
                 comboCounter++;
-                // // if (comboCounter > 8)
-                // // {
-                // //     comboCounter = 8;
-                // // }
-                // if (comboCounter % 2 == 0 & comboCounter > 0)
-                // {
-                //     // if (JumpPower > 30)
-                //     // {
-                //     //     JumpPower = 30;
-                //     // }
-                // }
+                if (comboCounter % 2 == 0 & comboCounter > 0)
+                {
+                    StartCoroutine(ShowComboHitText());
+                    StartCoroutine(GetComboWords());
+                }
                 JumpPower += _jumpPowerIncrease;
                 StartCoroutine(SetComboText());
             }
@@ -98,6 +105,7 @@ public class PlayerJumper : MonoBehaviour
             {
                 JumpPower = _jumpPower;
                 comboCounter = 0;
+                HideComboHitText();
             }
         }
     }
@@ -112,8 +120,6 @@ public class PlayerJumper : MonoBehaviour
             int index2 = FindObjectOfType<StairsSpawner>().StairsList.IndexOf(other.gameObject) + 4;
             int rndm = Random.Range(index, index2);
             transform.GetComponent<MeshRenderer>().material.color = stairsSpawner.StairsList[rndm].GetComponent<MeshRenderer>().material.color;
-
-            print(JumpPower);
         }
     }
     private void OnTriggerEnter(Collider other)
@@ -122,6 +128,13 @@ public class PlayerJumper : MonoBehaviour
         {
             _rb.velocity = Vector3.up * JumpPower;
         }
+        if (other.CompareTag("Destruction"))
+        {
+            if (comboCounter > 5)
+            {
+                // Destroy(other.GetComponentInParent<OneWayBoxCollider>().gameObject);
+            }
+        }
     }
     IEnumerator SetComboText()
     {
@@ -129,5 +142,26 @@ public class PlayerJumper : MonoBehaviour
         _comboParent.transform.position = new Vector3(_comboParent.transform.position.x, transform.position.y + 2, _comboParent.transform.position.z);
         yield return new WaitForSeconds(1);
         _comboText.SetActive(false);
+    }
+    IEnumerator ShowComboHitText()
+    {
+        if (comboCounter > 1)
+        {
+            _comboHitCount.SetActive(true);
+            _comboHitText.text = "+" + "" + comboCounter;
+            _comboAnim.SetTrigger("Combo");
+        }
+        yield return new WaitForSeconds(0.5f);
+    }
+    IEnumerator GetComboWords()
+    {
+        int rndm = Random.Range(0, 2);
+        ComboWordsList[rndm].SetActive(true);
+        yield return new WaitForSeconds(1f);
+        ComboWordsList[rndm].SetActive(false);
+    }
+    void HideComboHitText()
+    {
+        _comboHitCount.SetActive(false);
     }
 }

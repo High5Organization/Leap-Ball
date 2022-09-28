@@ -17,15 +17,15 @@ RenderSettings:
   m_Fog: 0
   m_FogColor: {r: 0.65080994, g: 0.666729, b: 0.7075472, a: 1}
   m_FogMode: 3
-  m_FogDensity: 0.05
+  m_FogDensity: 0.03
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
+  m_AmbientSkyColor: {r: 0.5313279, g: 0.5428979, b: 0.5660378, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 1
   m_AmbientMode: 3
-  m_SubtractiveShadowColor: {r: 0.13296545, g: 0.19145328, b: 0.33962262, a: 1}
+  m_SubtractiveShadowColor: {r: 0.5947846, g: 0.6453884, b: 0.7735849, a: 1}
   m_SkyboxMaterial: {fileID: 2100000, guid: 2bd8959f5fbd3644aa33af1a155fc147, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
@@ -1749,10 +1749,10 @@ MonoBehaviour:
   _stairsSpawnRate: 0.05
   _stairsPrefab: {fileID: 2322553724993246903, guid: 38228cf4fba953e408e631298887138c, type: 3}
   _colorList:
-  - {r: 1, g: 1, b: 0, a: 0}
-  - {r: 0, g: 0, b: 1, a: 0}
-  - {r: 0, g: 1, b: 0, a: 0}
-  - {r: 1, g: 0, b: 0, a: 0}
+  - {r: 0.8867924, g: 0.8867924, b: 0.04601282, a: 0}
+  - {r: 0.030838395, g: 0.030838395, b: 0.9339623, a: 0}
+  - {r: 0.039248828, g: 0.9245283, b: 0.039248828, a: 0}
+  - {r: 0.9245283, g: 0.030526895, b: 0.030526895, a: 0}
   playerJumper: {fileID: 15680995}
   StairsList: []
 --- !u!114 &1444370674
@@ -8139,7 +8139,7 @@ Light:
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
-  m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
+  m_Color: {r: 1, g: 0.9936724, b: 0.9764151, a: 1}
   m_Intensity: 0.9
   m_Range: 10
   m_SpotAngle: 30

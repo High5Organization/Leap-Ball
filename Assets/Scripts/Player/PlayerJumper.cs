@@ -35,6 +35,7 @@ public class PlayerJumper : MonoBehaviour
     private void Awake()
     {
         _rb = GetComponent<Rigidbody>();
+        transform.localScale = Vector3.one * 1.2f;
     }
     private void Start()
     {
@@ -59,7 +60,7 @@ public class PlayerJumper : MonoBehaviour
 
             if (Isjumpable == true)
             {
-                _rb.velocity = Vector3.up * JumpPower;
+                _rb.velocity = Vector3.up * JumpPower; //Jump
 
                 GameManager.Instance.BounceCount++;
                 _bounceCountText.text = "Bounces : " + GameManager.Instance.BounceCount;
@@ -74,15 +75,10 @@ public class PlayerJumper : MonoBehaviour
         if (other.gameObject.CompareTag("Stairs"))
         {
             Isjumpable = true;
-            _anim.SetBool("Shape", true);
 
             //Get Collided Stairs Index From StairList
             GameManager.Instance.StairsCount = FindObjectOfType<StairsSpawner>().StairsList.IndexOf(other.gameObject) + 1;
             _stairsCountText.text = "Stairs : " + GameManager.Instance.StairsCount;
-
-            // partical.transform.position = new Vector3(transform.position.x, transform.position.y - 0.4f, transform.position.z);
-            // partical.transform.SetParent(other.gameObject.transform);
-            // partical.Play();
 
             if (other.gameObject == stairsSpawner.StairsList[stairsSpawner.StairsList.Count - 1].gameObject)
             {
@@ -93,6 +89,7 @@ public class PlayerJumper : MonoBehaviour
             {
                 Handheld.Vibrate();
                 comboCounter++;
+
 
                 if (comboCounter > 5)
                 {
@@ -119,13 +116,16 @@ public class PlayerJumper : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Stairs"))
         {
-            _anim.SetBool("Shape", false);
+            // _anim.SetBool("Shape", false);
 
             //Get Next 4 Stairs Color Randomly For Player
             int index = FindObjectOfType<StairsSpawner>().StairsList.IndexOf(other.gameObject) + 1;
             int index2 = FindObjectOfType<StairsSpawner>().StairsList.IndexOf(other.gameObject) + 4;
-            int rndm = Random.Range(index, index2);
-            transform.GetComponent<MeshRenderer>().material.color = stairsSpawner.StairsList[rndm].GetComponent<MeshRenderer>().material.color;
+            int rndm = Mathf.Abs(Random.Range(index, index2));
+            if (rndm == 0)
+                return;
+            else
+                transform.GetComponent<MeshRenderer>().material.color = stairsSpawner.StairsList[rndm].GetComponent<MeshRenderer>().material.color;
         }
     }
     private void OnTriggerEnter(Collider other)

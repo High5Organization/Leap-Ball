@@ -6,6 +6,23 @@ public class Destruction : MonoBehaviour
 {
     [SerializeField] GameObject BreakedStair;
     [SerializeField] Material BreakedStairMaterial;
+    Animator anim;
+    private void Start()
+    {
+        anim = GetComponent<Animator>();
+        anim.SetBool("Shape", false);
+    }
+
+    private void OnCollisionEnter(Collision other)
+    {
+        if (GameManager.Instance.GameState == GameStates.InGameStart && other.transform.CompareTag("Player"))
+            anim.SetBool("Shape", true);
+    }
+    private void OnCollisionExit(Collision other)
+    {
+        if (GameManager.Instance.GameState == GameStates.InGameWin || other.transform.CompareTag("Player"))
+            anim.SetBool("Shape", false);
+    }
     private void OnTriggerEnter(Collider other)
     {
         // GameObject Stairs;

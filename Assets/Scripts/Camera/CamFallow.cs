@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 public class CamFallow : MonoBehaviour
@@ -16,7 +17,7 @@ public class CamFallow : MonoBehaviour
         Bloom bloom;
         Camera.fieldOfView = 60;
         SpeedUpEffect.SetActive(false);
-
+        
         if (volume.profile.TryGet<Bloom>(out bloom))
         {
             bloom.intensity.value = 1;
@@ -28,7 +29,6 @@ public class CamFallow : MonoBehaviour
         {
             Bloom bloom;
             SpeedUpEffect.SetActive(true);
-            // StartCoroutine(Destruct());
 
             float fieldOfView = Mathf.Lerp(Camera.fieldOfView, 90, Time.deltaTime * 10);
             Camera.fieldOfView = fieldOfView;
@@ -62,7 +62,7 @@ public class CamFallow : MonoBehaviour
 
             float cameraZAxis = Mathf.Lerp(Camera.transform.position.z, -25, Time.deltaTime * 10);
             Camera.transform.position = new Vector3(Player.transform.position.x, Player.transform.position.y + 5, cameraZAxis);
-            
+
             if (volume.profile.TryGet<Bloom>(out bloom))
             {
                 bloom.intensity.value = 1;

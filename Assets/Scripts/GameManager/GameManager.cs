@@ -9,6 +9,8 @@ public class GameManager : MonoBehaviour
     public event Action OnGameBegin;
     public event Action OnGameStart;
     public event Action OnGameWin;
+    public GameObject BounceText;
+    public GameObject StairText;
     #endregion
 
     public int StairsCount;

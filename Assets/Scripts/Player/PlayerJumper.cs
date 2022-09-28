@@ -55,6 +55,7 @@ public class PlayerJumper : MonoBehaviour
     }
     private void Update()
     {
+        //Bounce Count Text Operations
         if (GameManager.Instance.GameState == GameStates.InGameStart)
         {
 
@@ -62,7 +63,10 @@ public class PlayerJumper : MonoBehaviour
             {
                 _rb.velocity = Vector3.up * JumpPower; //Jump
 
-                GameManager.Instance.BounceCount++;
+                GameManager.Instance.BounceCount++; //Bounce Count Increase
+                
+                BounceTextAnim();
+
                 _bounceCountText.text = "Bounces : " + GameManager.Instance.BounceCount;
                 Isjumpable = false;
             }
@@ -78,13 +82,17 @@ public class PlayerJumper : MonoBehaviour
 
             //Get Collided Stairs Index From StairList
             GameManager.Instance.StairsCount = FindObjectOfType<StairsSpawner>().StairsList.IndexOf(other.gameObject) + 1;
+            
+            StairTextAnim();
+
             _stairsCountText.text = "Stairs : " + GameManager.Instance.StairsCount;
 
-            if (other.gameObject == stairsSpawner.StairsList[stairsSpawner.StairsList.Count - 1].gameObject)
+            if (other.gameObject == stairsSpawner.StairsList[stairsSpawner.StairsList.Count - 1].gameObject) // Find the Last member of StairList
             {
                 GameManager.Instance.IntializeGameWin();
                 Handheld.Vibrate();
             }
+            // If the Player Collides with the  Stairs of the Correct Color
             if (transform.GetComponent<MeshRenderer>().material.color == other.transform.GetComponent<MeshRenderer>().material.color)
             {
                 Handheld.Vibrate();
@@ -116,8 +124,6 @@ public class PlayerJumper : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Stairs"))
         {
-            // _anim.SetBool("Shape", false);
-
             //Get Next 4 Stairs Color Randomly For Player
             int index = FindObjectOfType<StairsSpawner>().StairsList.IndexOf(other.gameObject) + 1;
             int index2 = FindObjectOfType<StairsSpawner>().StairsList.IndexOf(other.gameObject) + 4;
@@ -130,10 +136,10 @@ public class PlayerJumper : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("GoUp"))
-        {
-            _rb.velocity = Vector3.up * JumpPower;
-        }
+        // if (other.CompareTag("GoUp"))
+        // {
+        //     _rb.velocity = Vector3.up * JumpPower;
+        // }
         if (other.CompareTag("Destruction"))
         {
             if (GameManager.Instance.IsDestructable)
@@ -178,5 +184,19 @@ public class PlayerJumper : MonoBehaviour
     void HideComboHitText()
     {
         _comboHitCount.SetActive(false);
+    }
+    void BounceTextAnim()
+    {
+        GameManager.Instance.BounceText.transform.DOScale(Vector3.one * 0.7f, 0.2f).OnComplete(() => //Bounce Text Anim
+          {
+              GameManager.Instance.BounceText.transform.DOScale(Vector3.one * 0.55f, 0.2f);
+          });
+    }
+    void StairTextAnim()
+    {
+        GameManager.Instance.StairText.transform.DOScale(Vector3.one * 0.7f, 0.2f).OnComplete(() => // Stair Text Anim
+           {
+               GameManager.Instance.StairText.transform.DOScale(Vector3.one * 0.55f, 0.2f);
+           });
     }
 }

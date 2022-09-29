@@ -9,8 +9,24 @@ public class GameManager : MonoBehaviour
     public event Action OnGameBegin;
     public event Action OnGameStart;
     public event Action OnGameWin;
+    public event Action OnJump;
+    public event Action OnDestruct;
+    public event Action OnSecondBoost;
+    public event Action OnThirtBoost;
+    public event Action OnButtonClick;
     #endregion
-    
+
+    #region  Sounds
+    [Header("Sounds")]
+    public AudioSource JumpSound;
+    public AudioSource DestructSound;
+    public AudioSource SecondBoost;
+    public AudioSource ThirtBoost;
+    public AudioSource GamePlay;
+    public AudioSource ButtonClicksSound;
+    public AudioSource WinSound;
+    #endregion
+
     #region Singleton
     public GameObject BounceText;
     public GameObject StairText;
@@ -57,5 +73,25 @@ public class GameManager : MonoBehaviour
     {
         GameState = GameStates.InGameWin;
         OnGameWin?.Invoke();
+    }
+    public void IntializeSecondBoost()
+    {
+        OnSecondBoost?.Invoke();
+    }
+    public void IntializeThirtBoost()
+    {
+        OnThirtBoost?.Invoke();
+    }
+    public void IntializeButtonClick()
+    {
+        OnButtonClick?.Invoke();
+    }
+    public void IntializeJump()
+    {
+        OnJump?.Invoke();
+    }
+    public void IntializeDestruct()
+    {
+        OnDestruct?.Invoke();
     }
 }

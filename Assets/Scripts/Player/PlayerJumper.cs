@@ -2,12 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 using DG.Tweening;
 
 public class PlayerJumper : MonoBehaviour
 {
     [Range(0, 8)]
-    float _jumPower;
     [SerializeField] Rigidbody _rb;
     [SerializeField] Animator _anim;
     [SerializeField] Animator _comboAnim;
@@ -46,7 +46,6 @@ public class PlayerJumper : MonoBehaviour
         _stairsCountText.text = "Stairs : " + GameManager.Instance.StairsCount;
 
         _comboHitCount.SetActive(false);
-        _comboHit2Count.SetActive(false);
         GameManager.Instance.ComboCounter = 0;
         _comboText.SetActive(false);
 
@@ -55,10 +54,19 @@ public class PlayerJumper : MonoBehaviour
             ComboWordsList[i].SetActive(false);
         }
     }
+    private void Update()
+    {
+        if (transform.position.y < -5)
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+    }
     private void OnCollisionEnter(Collision other)
     {
-        if (other.gameObject.CompareTag("Stairs"))
+        if (other.gameObject.CompareTag("Stairs") && GameManager.Instance.GameState == GameStates.InGameStart)
         {
+            GameManager.Instance.IntializeJump();
+
             GameManager.Instance.BounceCount++; //Bounce Count Increase
             _bounceCountText.text = "Bounces : " + GameManager.Instance.BounceCount;
 
@@ -69,6 +77,10 @@ public class PlayerJumper : MonoBehaviour
 
             if (other.gameObject == stairsSpawner.StairsList[stairsSpawner.StairsList.Count - 1].gameObject) // Find the Last member of StairList
             {
+                for (int i = 0; i < ComboWordsList.Count; i++)
+                {
+                    ComboWordsList[i].SetActive(false);
+                }
                 GameManager.Instance.IntializeGameWin();
                 Handheld.Vibrate();
             }
@@ -80,10 +92,18 @@ public class PlayerJumper : MonoBehaviour
                 _comboText.GetComponent<TextMesh>().text = "+" + "" + GameManager.Instance.ComboCounter;
 
                 GameManager.Instance._jumpPower += GameManager.Instance.JumpPowerIncrease;
-                
+
                 if (GameManager.Instance.ComboCounter > 5)
                 {
                     StartCoroutine(GetDestruct());
+                }
+                if (GameManager.Instance.ComboCounter == 6)
+                {
+                    GameManager.Instance.IntializeThirtBoost();
+                }
+                else if (GameManager.Instance.ComboCounter == 4)
+                {
+                    GameManager.Instance.IntializeSecondBoost();
                 }
                 StartCoroutine(SetComboText());
                 if (GameManager.Instance.ComboCounter % 2 == 0 && GameManager.Instance.ComboCounter > 0)
@@ -99,6 +119,15 @@ public class PlayerJumper : MonoBehaviour
                 HideComboHitText();
             }
             _rb.velocity = Vector3.up * GameManager.Instance._jumpPower; //Jump
+            if (GameManager.Instance.JumpSound.GetComponent<AudioSource>().pitch > 1.5f)
+            {
+                GameManager.Instance.JumpSound.GetComponent<AudioSource>().pitch = 1.5f;
+            }
+            else
+            {
+                GameManager.Instance.JumpSound.GetComponent<AudioSource>().pitch += 0.01f * GameManager.Instance.ComboCounter;
+            }
+
         }
     }
     private void OnCollisionExit(Collision other)
@@ -121,16 +150,16 @@ public class PlayerJumper : MonoBehaviour
             }
         }
     }
-    // private void OnTriggerEnter(Collider other)
-    // {
-    //     if (other.CompareTag("Destruction"))
-    //     {
-    //         if (GameManager.Instance.IsDestructable)
-    //         {
-    //             Destroy(other.GetComponentInParent<OneWayBoxCollider>().gameObject);
-    //         }
-    //     }
-    // }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Destruction"))
+        {
+            if (GameManager.Instance.IsDestructable)
+            {
+                Destroy(other.GetComponentInParent<Destruction>().gameObject);
+            }
+        }
+    }
     IEnumerator SetComboText()
     {
         _comboText.SetActive(true);
@@ -143,10 +172,8 @@ public class PlayerJumper : MonoBehaviour
         if (GameManager.Instance.ComboCounter > 1)
         {
             _comboHitCount.SetActive(true);
-            _comboHit2Count.SetActive(true);
             _comboHitText.text = "+" + "" + GameManager.Instance.ComboCounter;
             _comboAnim.SetTrigger("Combo");
-            _combo2Anim.SetTrigger("Combo2");
         }
         yield return new WaitForSeconds(0.5f);
     }
@@ -154,13 +181,13 @@ public class PlayerJumper : MonoBehaviour
     {
         int rndm = Random.Range(0, 2);
         ComboWordsList[rndm].SetActive(true);
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(3f);
         ComboWordsList[rndm].SetActive(false);
     }
     IEnumerator GetDestruct()
     {
         GameManager.Instance.IsDestructable = true;
-        yield return new WaitForSeconds(3f);
+        yield return new WaitUntil(() => GameManager.Instance.ComboCounter < 5);
         GameManager.Instance.IsDestructable = false;
     }
     void HideComboHitText()

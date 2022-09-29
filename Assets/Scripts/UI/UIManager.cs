@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using TMPro;
+using DG.Tweening;
 
 public class UIManager : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject _gamePanel;
     [SerializeField] GameObject _winPanel;
     [SerializeField] GameObject _player;
+    [SerializeField] GameObject BombImage;
 
     private void OnEnable()
     {
@@ -21,7 +23,6 @@ public class UIManager : MonoBehaviour
     }
     private void Update()
     {
-        print(GameManager.Instance.GameState);
     }
 
     void ShowStartPanel()
@@ -56,11 +57,14 @@ public class UIManager : MonoBehaviour
     }
     public void StartButton()
     {
-        GameManager.Instance.IntializeGameStart();
-        _player.GetComponent<Rigidbody>().isKinematic = false;
+        BombImage.transform.DOScale(Vector3.one * 33, 1f).OnComplete(() =>
+        {
+            GameManager.Instance.IntializeGameStart();
+            _player.GetComponent<Rigidbody>().isKinematic = false;
 
-        GameManager.Instance.BounceCount = -1;
-        GameManager.Instance.StairsCount = 0;
+            GameManager.Instance.BounceCount = -1;
+            GameManager.Instance.StairsCount = 0;
+        });
     }
 
     private void OnDisable()

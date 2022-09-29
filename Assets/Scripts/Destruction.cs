@@ -39,14 +39,8 @@ public class Destruction : MonoBehaviour
             BreakedStairMaterial.color = transform.GetComponent<MeshRenderer>().material.color;
             BreakedStair.GetComponent<Rigidbody>().AddRelativeForce(Vector3.up * 5, ForceMode.Impulse);
 
-            // BreakedStair.transform.GetComponent<MeshRenderer>().material.color = transform.GetComponent<MeshRenderer>().material.color;
-            StartCoroutine(DestroyBreakedStairDelay());
-            Destroy(gameObject);
-        }
-        IEnumerator DestroyBreakedStairDelay()
-        {
-            yield return new WaitForSeconds(1);
-            // Destroy(Stairs);
+            Destroy(Stairs, 3f);
+            Destroy(this.gameObject);
         }
     }
 }

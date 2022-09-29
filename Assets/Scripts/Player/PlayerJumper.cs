@@ -6,19 +6,18 @@ using DG.Tweening;
 
 public class PlayerJumper : MonoBehaviour
 {
-    float JumpPower;
     [Range(0, 8)]
-    public int comboCounter;
+    float _jumPower;
     [SerializeField] Rigidbody _rb;
-    [SerializeField] float _jumpPower;
-    [SerializeField] int _jumpPowerIncrease;
     [SerializeField] Animator _anim;
     [SerializeField] Animator _comboAnim;
+    [SerializeField] Animator _combo2Anim;
     [SerializeField] ParticleSystem partical;
     [SerializeField] StairsSpawner stairsSpawner;
     [SerializeField] List<Color> _colorList;
     [SerializeField] GameObject _comboText;
     [SerializeField] GameObject _comboHitCount;
+    [SerializeField] GameObject _comboHit2Count;
     [SerializeField] GameObject _comboParent;
     #region TMPRO
     [Header("TMPRO")]
@@ -31,21 +30,24 @@ public class PlayerJumper : MonoBehaviour
     [SerializeField] List<GameObject> ComboWordsList;
     #endregion
 
-    public bool Isjumpable;
     private void Awake()
     {
         _rb = GetComponent<Rigidbody>();
         transform.localScale = Vector3.one * 1.2f;
+        GameManager.Instance._jumpPower = GameManager.Instance.JumpPower;
     }
     private void Start()
     {
+        GameManager.Instance.IsDestructable = false;
+
         _anim.GetComponent<Animator>();
-        JumpPower = _jumpPower;
 
         _bounceCountText.text = "Bounces : " + GameManager.Instance.BounceCount;
         _stairsCountText.text = "Stairs : " + GameManager.Instance.StairsCount;
+
         _comboHitCount.SetActive(false);
-        comboCounter = 0;
+        _comboHit2Count.SetActive(false);
+        GameManager.Instance.ComboCounter = 0;
         _comboText.SetActive(false);
 
         for (int i = 0; i < ComboWordsList.Count; i++)
@@ -53,37 +55,15 @@ public class PlayerJumper : MonoBehaviour
             ComboWordsList[i].SetActive(false);
         }
     }
-    private void Update()
-    {
-        //Bounce Count Text Operations
-        if (GameManager.Instance.GameState == GameStates.InGameStart)
-        {
-
-            if (Isjumpable == true)
-            {
-                _rb.velocity = Vector3.up * JumpPower; //Jump
-
-                GameManager.Instance.BounceCount++; //Bounce Count Increase
-                
-                BounceTextAnim();
-
-                _bounceCountText.text = "Bounces : " + GameManager.Instance.BounceCount;
-                Isjumpable = false;
-            }
-
-            _comboText.GetComponent<TextMesh>().text = "+" + "" + comboCounter;
-        }
-    }
     private void OnCollisionEnter(Collision other)
     {
         if (other.gameObject.CompareTag("Stairs"))
         {
-            Isjumpable = true;
+            GameManager.Instance.BounceCount++; //Bounce Count Increase
+            _bounceCountText.text = "Bounces : " + GameManager.Instance.BounceCount;
 
             //Get Collided Stairs Index From StairList
             GameManager.Instance.StairsCount = FindObjectOfType<StairsSpawner>().StairsList.IndexOf(other.gameObject) + 1;
-            
-            StairTextAnim();
 
             _stairsCountText.text = "Stairs : " + GameManager.Instance.StairsCount;
 
@@ -96,28 +76,29 @@ public class PlayerJumper : MonoBehaviour
             if (transform.GetComponent<MeshRenderer>().material.color == other.transform.GetComponent<MeshRenderer>().material.color)
             {
                 Handheld.Vibrate();
-                comboCounter++;
+                GameManager.Instance.ComboCounter++;
+                _comboText.GetComponent<TextMesh>().text = "+" + "" + GameManager.Instance.ComboCounter;
 
-
-                if (comboCounter > 5)
+                GameManager.Instance._jumpPower += GameManager.Instance.JumpPowerIncrease;
+                
+                if (GameManager.Instance.ComboCounter > 5)
                 {
-                    StartCoroutine(Destruct());
+                    StartCoroutine(GetDestruct());
                 }
-
-                if (comboCounter % 2 == 0 & comboCounter > 0)
+                StartCoroutine(SetComboText());
+                if (GameManager.Instance.ComboCounter % 2 == 0 && GameManager.Instance.ComboCounter > 0)
                 {
                     StartCoroutine(ShowComboHitText());
                     StartCoroutine(GetComboWords());
                 }
-                JumpPower += _jumpPowerIncrease;
-                StartCoroutine(SetComboText());
             }
-            else
+            else if (transform.GetComponent<MeshRenderer>().material.color != other.transform.GetComponent<MeshRenderer>().material.color)
             {
-                JumpPower = _jumpPower;
-                comboCounter = 0;
+                GameManager.Instance._jumpPower = GameManager.Instance.JumpPower;
+                GameManager.Instance.ComboCounter = 0;
                 HideComboHitText();
             }
+            _rb.velocity = Vector3.up * GameManager.Instance._jumpPower; //Jump
         }
     }
     private void OnCollisionExit(Collision other)
@@ -125,29 +106,31 @@ public class PlayerJumper : MonoBehaviour
         if (other.gameObject.CompareTag("Stairs"))
         {
             //Get Next 4 Stairs Color Randomly For Player
-            int index = FindObjectOfType<StairsSpawner>().StairsList.IndexOf(other.gameObject) + 1;
-            int index2 = FindObjectOfType<StairsSpawner>().StairsList.IndexOf(other.gameObject) + 4;
-            int rndm = Mathf.Abs(Random.Range(index, index2));
-            if (rndm == 0)
-                return;
-            else
-                transform.GetComponent<MeshRenderer>().material.color = stairsSpawner.StairsList[rndm].GetComponent<MeshRenderer>().material.color;
-        }
-    }
-    private void OnTriggerEnter(Collider other)
-    {
-        // if (other.CompareTag("GoUp"))
-        // {
-        //     _rb.velocity = Vector3.up * JumpPower;
-        // }
-        if (other.CompareTag("Destruction"))
-        {
-            if (GameManager.Instance.IsDestructable)
+            int index = stairsSpawner.StairsList.IndexOf(other.gameObject) + 1;
+            int index2 = index + 4;
+            print(index + "ve" + index2);
+            int rndm = Random.Range(index, index2);
+            int abs = Mathf.Abs(rndm);
+            if (stairsSpawner.StairsList[abs] != null)
             {
-                Destroy(other.GetComponentInParent<OneWayBoxCollider>().gameObject);
+                transform.GetComponent<MeshRenderer>().material.color = stairsSpawner.StairsList[abs].GetComponent<MeshRenderer>().material.color;
+            }
+            else
+            {
+                transform.transform.GetComponent<MeshRenderer>().material.color = other.transform.GetComponent<MeshRenderer>().material.color;
             }
         }
     }
+    // private void OnTriggerEnter(Collider other)
+    // {
+    //     if (other.CompareTag("Destruction"))
+    //     {
+    //         if (GameManager.Instance.IsDestructable)
+    //         {
+    //             Destroy(other.GetComponentInParent<OneWayBoxCollider>().gameObject);
+    //         }
+    //     }
+    // }
     IEnumerator SetComboText()
     {
         _comboText.SetActive(true);
@@ -157,11 +140,13 @@ public class PlayerJumper : MonoBehaviour
     }
     IEnumerator ShowComboHitText()
     {
-        if (comboCounter > 1)
+        if (GameManager.Instance.ComboCounter > 1)
         {
             _comboHitCount.SetActive(true);
-            _comboHitText.text = "+" + "" + comboCounter;
+            _comboHit2Count.SetActive(true);
+            _comboHitText.text = "+" + "" + GameManager.Instance.ComboCounter;
             _comboAnim.SetTrigger("Combo");
+            _combo2Anim.SetTrigger("Combo2");
         }
         yield return new WaitForSeconds(0.5f);
     }
@@ -172,31 +157,15 @@ public class PlayerJumper : MonoBehaviour
         yield return new WaitForSeconds(1f);
         ComboWordsList[rndm].SetActive(false);
     }
-    IEnumerator Destruct()
+    IEnumerator GetDestruct()
     {
-        print("bi daha");
         GameManager.Instance.IsDestructable = true;
-
-        yield return new WaitForSeconds(2f);
-
+        yield return new WaitForSeconds(3f);
         GameManager.Instance.IsDestructable = false;
     }
     void HideComboHitText()
     {
         _comboHitCount.SetActive(false);
-    }
-    void BounceTextAnim()
-    {
-        GameManager.Instance.BounceText.transform.DOScale(Vector3.one * 0.7f, 0.2f).OnComplete(() => //Bounce Text Anim
-          {
-              GameManager.Instance.BounceText.transform.DOScale(Vector3.one * 0.55f, 0.2f);
-          });
-    }
-    void StairTextAnim()
-    {
-        GameManager.Instance.StairText.transform.DOScale(Vector3.one * 0.7f, 0.2f).OnComplete(() => // Stair Text Anim
-           {
-               GameManager.Instance.StairText.transform.DOScale(Vector3.one * 0.55f, 0.2f);
-           });
+        _comboHit2Count.SetActive(false);
     }
 }

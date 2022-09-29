@@ -13,11 +13,10 @@ public class CamFallow : MonoBehaviour
     [SerializeField] GameObject SpeedUpEffect;
     private void Start()
     {
-        GameManager.Instance.IsDestructable = false;
         Bloom bloom;
         Camera.fieldOfView = 60;
         SpeedUpEffect.SetActive(false);
-        
+
         if (volume.profile.TryGet<Bloom>(out bloom))
         {
             bloom.intensity.value = 1;
@@ -25,7 +24,7 @@ public class CamFallow : MonoBehaviour
     }
     private void Update()
     {
-        if (playerJumper.comboCounter > 5 && GameManager.Instance.GameState == GameStates.InGameStart)
+        if (GameManager.Instance.ComboCounter > 5 && GameManager.Instance.GameState == GameStates.InGameStart)
         {
             Bloom bloom;
             SpeedUpEffect.SetActive(true);
@@ -41,7 +40,7 @@ public class CamFallow : MonoBehaviour
             float cameraZAxis = Mathf.Lerp(Camera.transform.position.z, -30, Time.deltaTime * 3);
             Camera.transform.position = new Vector3(Player.transform.position.x, Player.transform.position.y + 5, cameraZAxis);
         }
-        else if (playerJumper.comboCounter > 3 && GameManager.Instance.GameState == GameStates.InGameStart)
+        else if (GameManager.Instance.ComboCounter > 3 && GameManager.Instance.GameState == GameStates.InGameStart)
         {
             float fieldOfView = Mathf.Lerp(Camera.fieldOfView, 70, Time.deltaTime * 10);
             Camera.fieldOfView = fieldOfView;
@@ -52,9 +51,6 @@ public class CamFallow : MonoBehaviour
         else
         {
             Bloom bloom;
-
-            GameManager.Instance.IsDestructable = false;
-
             SpeedUpEffect.SetActive(false);
 
             float fieldOfView = Mathf.Lerp(Camera.fieldOfView, 60, Time.deltaTime * 10);

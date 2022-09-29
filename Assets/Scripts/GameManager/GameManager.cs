@@ -9,15 +9,21 @@ public class GameManager : MonoBehaviour
     public event Action OnGameBegin;
     public event Action OnGameStart;
     public event Action OnGameWin;
+    #endregion
+    
+    #region Singleton
     public GameObject BounceText;
     public GameObject StairText;
-    #endregion
+    public bool IsJumpable;
+    public int ComboCounter;
+    public int JumpPower;
+    public int _jumpPower;
+    public int JumpPowerIncrease;
 
     public int StairsCount;
     public int BounceCount;
     public int PoolSize;
     public bool IsDestructable;
-    #region Singleton
 
     public static GameManager Instance { get; private set; }
     public GameStates GameState { get; private set; }

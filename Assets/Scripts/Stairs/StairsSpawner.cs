@@ -58,16 +58,17 @@ public class StairsSpawner : MonoBehaviour
     }
     private void Update()
     {
-        if (playerJumper.comboCounter > 3 && GameManager.Instance.GameState == GameStates.InGameStart)
+        if (GameManager.Instance.ComboCounter > 5 && GameManager.Instance.GameState == GameStates.InGameStart)
+        {
+            _playerFireTrail.SetActive(true);
+            _playerTrail.SetActive(false);
+        }
+        else if (GameManager.Instance.ComboCounter > 3 && GameManager.Instance.GameState == GameStates.InGameStart)
         {
             _playerTrail.SetActive(true);
             float yAxis = Mathf.Lerp(_playerTrail.transform.position.y, _player.transform.position.y, Time.deltaTime * 10);
             _playerTrail.transform.position = new Vector3(transform.position.x, yAxis, _player.transform.position.z);
-        }
-        if (playerJumper.comboCounter > 5 && GameManager.Instance.GameState == GameStates.InGameStart)
-        {
-            _playerTrail.SetActive(false);
-            _playerFireTrail.SetActive(true);
+            _playerFireTrail.SetActive(false);
         }
         else
         {

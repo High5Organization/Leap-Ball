@@ -10,28 +10,24 @@ public class Rotator : MonoBehaviour
     private void Awake()
     {
         InputSystem = GetComponent<InputSystem>();
-        // _rb = GetComponent<Rigidbody>();
     }
     private void Update()
     {
         float SwipeSpeed = Mathf.Clamp(InputSystem.HorizontalDirection, -4f, 4f);
         InputSystem.GetInputData();
-        print(SwipeSpeed);
 
         if (GameManager.Instance.GameState == GameStates.InGameStart)
         {
-            if (playerJumper.comboCounter > 5)
+            if (GameManager.Instance.ComboCounter > 5)
             {
                 transform.Rotate(Vector3.up * SwipeSpeed * 2f);
             }
-            else if (playerJumper.comboCounter > 3)
+            else if (GameManager.Instance.ComboCounter > 3)
             {
                 transform.Rotate(Vector3.up * SwipeSpeed * 2f);
             }
             else
             {
-                // transform.Rotate(Vector3.up * SwipeSpeed);
-                // _rb.angularVelocity = Vector3.up * InputSystem.HorizontalDirection;
                 _rb.rotation = Quaternion.Euler(_rb.rotation.eulerAngles + Vector3.up * SwipeSpeed);
             }
         }

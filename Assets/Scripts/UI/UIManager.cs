@@ -15,8 +15,14 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject BombImage;
     [SerializeField] GameObject SettingsBttn;
     [SerializeField] GameObject ExitBttn;
+    [SerializeField] LevelCreator LevelCreator;
     [SerializeField] TextMeshProUGUI StairCount;
     [SerializeField] TextMeshProUGUI BounceCount;
+    [SerializeField] LevelCreator levelCreator;
+    private void Start()
+    {
+        levelCreator.GetLevel();
+    }
     private void OnEnable()
     {
         GameManager.Instance.OnGameBegin += ShowStartPanel;
@@ -60,6 +66,7 @@ public class UIManager : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         GameManager.Instance.IntializeButtonClick();
+        levelCreator.GoNextLevel();
     }
     public void ExitButton()
     {

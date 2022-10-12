@@ -14,6 +14,7 @@ public class StairsSpawner : MonoBehaviour
     [SerializeField] float _stairsDistanceZ;
     [SerializeField] float _stairsSpawnRate;
     [SerializeField] GameObject _stairsPrefab;
+    [SerializeField] LevelCreator levelCreator;
     [SerializeField] List<Color> _colorList;
     [SerializeField] PlayerJumper playerJumper;
     public List<GameObject> StairsList;
@@ -23,7 +24,7 @@ public class StairsSpawner : MonoBehaviour
     {
         _stairsPoolObjects = new Queue<GameObject>(); // Creating a Queue for Object Pooling
         StairsList = new List<GameObject>(); // Adding Queue To List
-        for (int i = 0; i < GameManager.Instance.PoolSize; i++)
+        for (int i = 0; i < levelCreator.PoolSize; i++)
         {
             GameObject stairs = Instantiate(_stairsPrefab);
             stairs.GetComponent<MeshRenderer>().enabled = false;
@@ -39,7 +40,7 @@ public class StairsSpawner : MonoBehaviour
         _player.transform.position = new Vector3(StairsList[0].transform.position.x, StairsList[0].GetComponent<MeshRenderer>().bounds.size.y + .5f, _stairsDistanceZ - 5);
         StartCoroutine(SpawnStairs());
 
-        for (int i = 0; i < GameManager.Instance.PoolSize; i++)
+        for (int i = 0; i < levelCreator.PoolSize; i++)
         {
             var Stairs = GetPooledObject();
             Stairs.transform.SetParent(transform);

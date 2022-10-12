@@ -144,6 +144,10 @@ public class PlayerJumper : MonoBehaviour
             {
                 transform.GetComponent<MeshRenderer>().material.color = stairsSpawner.StairsList[abs].GetComponent<MeshRenderer>().material.color;
             }
+            else if (other.transform == stairsSpawner.StairsList[stairsSpawner.StairsList.Count])
+            {
+                transform.transform.GetComponent<MeshRenderer>().material.color = other.transform.GetComponent<MeshRenderer>().material.color;
+            }
             else
             {
                 transform.transform.GetComponent<MeshRenderer>().material.color = other.transform.GetComponent<MeshRenderer>().material.color;
